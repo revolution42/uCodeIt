@@ -3,6 +3,7 @@ using uCodeIt.Strategies;
 using Umbraco.Core;
 using System.Linq;
 using uCodeIt.Metadata;
+using System.Reflection;
 
 namespace uCodeIt
 {
@@ -26,6 +27,10 @@ namespace uCodeIt
                                     let attr = type.GetCustomAttribute<DocumentTypeAttribute>(true)
                                     let name = string.IsNullOrEmpty(attr.Name) ? type.Name : attr.Name
                                     let alias = string.IsNullOrEmpty(attr.Alias) ? type.Name : attr.Alias
+                                    let properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(property => new {
+                                        Attribute = property.GetCustomAttribute<PropertyAttribute>(),
+                                        Property = property
+                                    })
                                     select new DocumentTypeMetadata
                                     {
                                         Name = name,
@@ -34,6 +39,12 @@ namespace uCodeIt
                                         Icon = attr.Icon,
                                         Thumbnail = attr.Thumbnail,
                                         AllowAsRoot = attr.AllowAsRoot,
+                                        Properties = properties.Select(p => new PropertyMetadata {
+                                            Name = string.IsNullOrEmpty(p.Attribute.Name) ? p.Property.Name : p.Attribute.Name,
+                                            Alias = string.IsNullOrEmpty(p.Attribute.Alias) ? p.Property.Name : p.Attribute.Alias,
+                                            Description = p.Attribute.Description,
+                                            DataType = p.Attribute.DataType
+                                        }),
                                         Type = type,
                                         Attribute = attr
                                     }).ToArray();

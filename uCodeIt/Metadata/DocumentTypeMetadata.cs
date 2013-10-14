@@ -12,7 +12,6 @@ namespace uCodeIt.Metadata
         public IEnumerable<string> Templates { get; internal set; }
         public IEnumerable<DocumentTypeMetadata> AllowedChildren { get; internal set; }
 
-        public Type Type { get; internal set; }
         internal DocumentTypeAttribute Attribute { get; set; }
 
         public IEnumerable<PropertyMetadata> Properties { get; internal set; }

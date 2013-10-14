@@ -158,6 +158,7 @@
     <Compile Include="CacheValidator.cs" />
     <Compile Include="DocumentTypes\DocumentTypeAttribute.cs" />
     <Compile Include="DocumentTypes\DocumentTypeBase.cs" />
+    <Compile Include="DocumentTypes\PropertyAttribute.cs" />
     <Compile Include="Metadata\DocumentTypeMetadata.cs" />
     <Compile Include="Metadata\PropertyMetadata.cs" />
     <Compile Include="Metadata\TypeMetadata.cs" />
