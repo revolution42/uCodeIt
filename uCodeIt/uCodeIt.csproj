@@ -7,8 +7,8 @@
     <ProjectGuid>{B8BA2D50-67F6-475F-BFEB-694BDF2BE5A3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>uCodeFirst</RootNamespace>
-    <AssemblyName>uCodeFirst</AssemblyName>
+    <RootNamespace>uCodeIt</RootNamespace>
+    <AssemblyName>uCodeIt</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace uCodeFirst.DocumentTypes
+namespace uCodeIt.DocumentTypes
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
     public sealed class DocumentTypeAttribute : Attribute

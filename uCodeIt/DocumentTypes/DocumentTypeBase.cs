@@ -1,4 +1,4 @@
-﻿namespace uCodeFirst.DocumentTypes
+﻿namespace uCodeIt.DocumentTypes
 {
     public abstract class DocumentTypeBase
     {
