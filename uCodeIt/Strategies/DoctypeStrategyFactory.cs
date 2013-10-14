@@ -15,21 +15,23 @@ namespace uCodeIt.Strategies
         public static DoctypeStrategyFactory Current {
             get {
                 if (_strategy == null) _strategy = new DefaultStrategy();
-                return new DoctypeStrategyFactory(_strategy.GetType());
+                return new DoctypeStrategyFactory(_strategy);
             }
         }
 
-        public DoctypeStrategyFactory(Type strategyType)
+        public DoctypeStrategyFactory(IDoctypeInitStrategy strategyType)
         {
-            if (!strategyType.Inherits<IDoctypeInitStrategy>()) throw new ArgumentException();
-            _strategy = (IDoctypeInitStrategy)strategyType.GetConstructor(null).Invoke(null);
-
+            _strategy = strategyType;
         }
 
-        public static void SetStrategy(IDoctypeInitStrategy strategy)
+        public void SetStrategy(IDoctypeInitStrategy strategy)
         {
             _strategy = strategy;
         }
 
+        public void Execute()
+        {
+            _strategy.Process(null);
+        }
     }
 }
