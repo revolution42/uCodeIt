@@ -12,8 +12,8 @@ namespace uCodeIt
     {
         public void OnApplicationInitialized(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            DoctypeStrategyFactory.Current.SetStrategy(null);
-            DoctypeStrategyFactory.Current.Execute();
+            DocumentTypeStrategyFactory.Current.SetStrategy(null);
+            DocumentTypeStrategyFactory.Current.Execute();
             // something.Execute();
             // uCodeIt.Strategies.DoctypeStrategyFactory.Current.Execute();
         }

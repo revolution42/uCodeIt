@@ -7,7 +7,7 @@ using Umbraco.Core.Services;
 
 namespace uCodeIt.Strategies
 {
-    public class DefaultStrategy : IDoctypeInitStrategy
+    public class DefaultStrategy : IDocumentTypeInitStrategy
     {
         public IContentTypeService ContentTypeService { get; set; }
 

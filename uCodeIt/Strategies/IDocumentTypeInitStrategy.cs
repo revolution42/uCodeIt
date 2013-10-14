@@ -5,7 +5,7 @@ using System.Text;
 
 namespace uCodeIt.Strategies
 {
-    public interface IDoctypeInitStrategy
+    public interface IDocumentTypeInitStrategy
     {
         void Process(IEnumerable<Type> types);
     }

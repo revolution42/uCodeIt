@@ -160,8 +160,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartupHandler.cs" />
     <Compile Include="Strategies\DefaultStrategy.cs" />
-    <Compile Include="Strategies\DoctypeStrategyFactory.cs" />
-    <Compile Include="Strategies\IDoctypeInitStrategy.cs" />
+    <Compile Include="Strategies\DocumentTypeStrategyFactory.cs" />
+    <Compile Include="Strategies\IDocumentTypeInitStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
