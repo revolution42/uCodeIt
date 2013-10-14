@@ -5,13 +5,13 @@ namespace uCodeIt
 {
     internal static class CacheValidator
     {
-        private const string CacheFile = "uCodeIt-TypeCache.xml";
+        private const string BuildManagerTracker = "uCodeIt-Tracker.txt";
 
-        public static bool Exists()
+        public static bool RebuildRequired()
         {
             try
             {
-                var stream = BuildManager.ReadCachedFile(CacheFile);
+                var stream = BuildManager.ReadCachedFile(BuildManagerTracker);
 
                 using (var reader = new StreamReader(stream))
                 {
@@ -27,6 +27,22 @@ namespace uCodeIt
             }
 
             return false;
+        }
+
+        internal static void RebuildComplete()
+        {
+            try
+            {
+                var stream = BuildManager.CreateCachedFile(BuildManagerTracker);
+
+                using (var writer = new StreamWriter(stream))
+                {
+                    writer.WriteLine("Build completed");
+                }
+            }
+            catch
+            {
+            }
         }
     }
 }

@@ -15,7 +15,7 @@ namespace uCodeIt
 
         public void OnApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            if (CacheValidator.Exists())
+            if (!CacheValidator.RebuildRequired())
                 //The cache already exists and by extension has been run
                 return;
 
@@ -53,6 +53,8 @@ namespace uCodeIt
                     documentType.AllowedChildren = documentTypes.Where(t => documentType.Attribute.AllowedChildren.Any(x => x == t.Type));
 
                 strategy.Process(documentTypes);
+
+                CacheValidator.RebuildComplete();
             }
         }
 
