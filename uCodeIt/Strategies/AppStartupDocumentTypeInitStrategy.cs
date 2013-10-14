@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using uCodeIt.DocumentTypes;
 using uCodeIt.Metadata;
 using Umbraco.Core;
+using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 
 namespace uCodeIt.Strategies
@@ -23,10 +24,24 @@ namespace uCodeIt.Strategies
 
         public void Process(IEnumerable<DocumentTypeMetadata> types)
         {
+            var contentTypes = new List<ContentType>();
+
             foreach (var type in types)
             {
-                
+                var ct = new ContentType(-1)
+                {
+                    Name = type.Name,
+                    Alias = type.Alias,
+                    AllowedAsRoot = type.AllowAsRoot,
+                    Description = type.Description,
+                    Icon = type.Icon,
+                    Thumbnail = type.Thumbnail
+                };
+
+                contentTypes.Add(ct);
             }
+
+            ContentTypeService.Save(contentTypes);
         }
 
         public bool CanRun()
