@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using uCodeIt.DocumentTypes;
 using Umbraco.Core;
 using Umbraco.Core.Services;
 
@@ -19,13 +20,11 @@ namespace uCodeIt.Strategies
 
         public IContentTypeService ContentTypeService { get; private set; }
 
-        public void Process(IEnumerable<Type> types)
+        public void Process(IEnumerable<DocumentTypeMetadata> types)
         {
             foreach (var type in types)
             {
-                foreach (var prop in type.GetProperties()) {
-                    // prop.Name
-                }
+                
             }
         }
 

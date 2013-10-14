@@ -1,6 +1,7 @@
 ﻿using uCodeIt.DocumentTypes;
 using uCodeIt.Strategies;
 using Umbraco.Core;
+using System.Linq;
 
 namespace uCodeIt
 {
@@ -20,7 +21,25 @@ namespace uCodeIt
 
             if (strategy.CanRun())
             {
-                var documentTypes = TypeFinder.FindClassesOfType<DocumentTypeBase>();
+                var documentTypes = (from type in TypeFinder.FindClassesOfType<DocumentTypeBase>()
+                                    let attr = type.GetCustomAttribute<DocumentTypeAttribute>(true)
+                                    let name = string.IsNullOrEmpty(attr.Name) ? type.Name : attr.Name
+                                    let alias = string.IsNullOrEmpty(attr.Alias) ? type.Name : attr.Alias
+                                    select new DocumentTypeMetadata
+                                    {
+                                        Name = name,
+                                        Alias = alias,
+                                        Description = attr.Description,
+                                        Icon = attr.Icon,
+                                        Thumbnail = attr.Thumbnail,
+                                        AllowAsRoot = attr.AllowAsRoot,
+                                        Type = type,
+                                        Attribute = attr
+                                    }).ToArray();
+
+                foreach (var documentType in documentTypes)
+                    documentType.AllowedChildren = documentTypes.Where(t => documentType.Attribute.AllowedChildren.Any(x => x == t.Type));
+
                 strategy.Process(documentTypes);
             }
         }
