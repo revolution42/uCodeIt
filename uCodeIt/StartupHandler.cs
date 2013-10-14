@@ -12,6 +12,10 @@ namespace uCodeIt
 
         public void OnApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
+            if (CacheValidator.Exists())
+                //The cache already exists and by extension has been run
+                return;
+
             var strategy = DocumentTypeStrategyFactory.Current;
 
             if (strategy.CanRun())
