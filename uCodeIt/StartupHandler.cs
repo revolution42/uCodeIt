@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using uCodeIt.DocumentTypes;
 using uCodeIt.Strategies;
 using Umbraco.Core;
 
@@ -12,20 +8,21 @@ namespace uCodeIt
     {
         public void OnApplicationInitialized(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            DocumentTypeStrategyFactory.Current.SetStrategy(null);
-            DocumentTypeStrategyFactory.Current.Execute();
-            // something.Execute();
-            // uCodeIt.Strategies.DoctypeStrategyFactory.Current.Execute();
         }
 
         public void OnApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
+            var strategy = DocumentTypeStrategyFactory.Current;
 
+            if (strategy.CanRun())
+            {
+                var documentTypes = TypeFinder.FindClassesOfType<DocumentTypeBase>();
+                strategy.Process(documentTypes);
+            }
         }
 
         public void OnApplicationStarting(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            
         }
     }
 }

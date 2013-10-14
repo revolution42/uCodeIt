@@ -8,30 +8,20 @@ using Umbraco.Core;
 
 namespace uCodeIt.Strategies
 {
-    public class DocumentTypeStrategyFactory {
-        
+    public static class DocumentTypeStrategyFactory {
+
         private static IDocumentTypeInitStrategy _strategy = null;
-        
-        public static DocumentTypeStrategyFactory Current {
-            get {
-                if (_strategy == null) _strategy = new DefaultStrategy();
-                return new DocumentTypeStrategyFactory(_strategy);
+
+        public static IDocumentTypeInitStrategy Current
+        {
+            get
+            {
+                return _strategy == null ? _strategy = new AppStartupDocumentTypeInitStrategy() : _strategy;
             }
-        }
-
-        public DocumentTypeStrategyFactory(IDocumentTypeInitStrategy strategyType)
-        {
-            _strategy = strategyType;
-        }
-
-        public void SetStrategy(IDocumentTypeInitStrategy strategy)
-        {
-            _strategy = strategy;
-        }
-
-        public void Execute()
-        {
-            _strategy.Process(null);
+            set
+            {
+                _strategy = value;
+            }
         }
     }
 }
