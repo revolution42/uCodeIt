@@ -2,6 +2,7 @@
 using uCodeIt.Strategies;
 using Umbraco.Core;
 using System.Linq;
+using uCodeIt.Metadata;
 
 namespace uCodeIt
 {

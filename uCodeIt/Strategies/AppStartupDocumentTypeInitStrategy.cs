@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using uCodeIt.DocumentTypes;
+using uCodeIt.Metadata;
 using Umbraco.Core;
 using Umbraco.Core.Services;
 

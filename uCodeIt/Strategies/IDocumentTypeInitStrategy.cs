@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using uCodeIt.DocumentTypes;
+﻿using System.Collections.Generic;
+using uCodeIt.Metadata;
 using Umbraco.Core.Services;
 
 namespace uCodeIt.Strategies

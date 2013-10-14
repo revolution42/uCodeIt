@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-namespace uCodeIt.DocumentTypes
+using uCodeIt.DocumentTypes;
+
+namespace uCodeIt.Metadata
 {
-    public sealed class DocumentTypeMetadata
+    public sealed class DocumentTypeMetadata : TypeMetadata
     {
-        public string Name { get; internal set; }
-        public string Alias { get; internal set; }
-        public string Description { get; internal set; }
         public string Icon { get; internal set; }
         public string Thumbnail { get; internal set; }
         public bool AllowAsRoot { get; internal set; }
@@ -16,6 +15,6 @@ namespace uCodeIt.DocumentTypes
         public Type Type { get; internal set; }
         internal DocumentTypeAttribute Attribute { get; set; }
 
-        //public IEnumerable<PropertyMetadata> Properties { get; internal set; }
+        public IEnumerable<PropertyMetadata> Properties { get; internal set; }
     }
 }
