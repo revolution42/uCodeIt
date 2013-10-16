@@ -1,13 +1,27 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
 using System.Web.Compilation;
+using System.Xml.Linq;
+using uCodeIt.DocumentTypes;
+using Umbraco.Core;
+using Umbraco.Core.IO;
 
 namespace uCodeIt
 {
     internal static class CacheValidator
     {
         private const string BuildManagerTracker = "uCodeIt-Tracker.txt";
+        private const string TypeCache = "~/App_Data/uCodeIt-TypeCache.xml";
 
-        public static bool RebuildRequired()
+        private static Dictionary<Type, string> cache;
+
+        private static object locker = new object();
+
+        internal static bool RebuildRequired()
         {
             try
             {
@@ -43,6 +57,94 @@ namespace uCodeIt
             catch
             {
             }
+        }
+
+        internal static void EnsureInitialized()
+        {
+            if (cache == null)
+            {
+                lock (locker)
+                {
+                    if (cache == null)
+                    {
+                        var location = IOHelper.MapPath(TypeCache);
+
+                        if (!File.Exists(location))
+                        {
+                            var types = TypeFinder.FindClassesOfType<DocumentTypeBase>();
+                            cache = types.ToDictionary(t => t, CreateHash);
+
+                            var xml = cache
+                                .GroupBy(x => x.Key.Module)
+                                .GroupBy(x => x.Key.Assembly)
+                                .Select(x =>
+                                    new XElement("assembly",
+                                        new XAttribute("name", x.Key.FullName),
+                                        x.Select(module =>
+                                            new XElement("module",
+                                                new XAttribute("versionId", module.Key.ModuleVersionId),
+                                                module.Select(type =>
+                                                    new XElement("type",
+                                                        new XElement("name", type.Key.FullName),
+                                                        new XElement("hash", type.Value)
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                );
+
+                            new XElement("typeCache", xml).Save(location);
+                        }
+                        else
+                        {
+                            var readTypes = ReadTypesFromCache(location);
+                            cache = readTypes;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static Dictionary<Type, string> ReadTypesFromCache(string location)
+        {
+            var xml = XDocument.Load(location);
+            var assemblies = xml.Descendants("assembly");
+            var cache = new Dictionary<Type, string>();
+
+            foreach (var assembly in assemblies)
+            {
+                var asm = Assembly.Load(assembly.Attribute("name").Value);
+                foreach (var module in assembly.Descendants())
+                {
+                    var moduleVersionId = new Guid(module.Attribute("versionId").Value);
+                    foreach (var type in module.Descendants())
+                    {
+                        var typeName = type.Descendants("name").First().Value;
+                        var typeHash = type.Descendants("hash").First().Value;
+
+                        var t = asm.GetType(typeName);
+
+                        if (t != null && t.Module.ModuleVersionId == moduleVersionId && CreateHash(t) == typeHash)
+                            cache.Add(t, typeHash);
+                    }
+                }
+            }
+
+            return cache;
+        }
+
+        private static string CreateHash(Type t)
+        {
+            var properties = t.GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name);
+            var hasher = MD5.Create();
+
+            var id = t.FullName + "-" + properties.Aggregate((x, y) => x += "-" + y);
+
+            var bytes = System.Text.Encoding.ASCII.GetBytes(id);
+            var hash = hasher.ComputeHash(bytes);
+
+            return string.Join(string.Empty, hash.Select(x => x.ToString("X2")));
         }
     }
 }

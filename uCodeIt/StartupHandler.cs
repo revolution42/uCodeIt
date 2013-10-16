@@ -23,6 +23,8 @@ namespace uCodeIt
 
             if (strategy.CanRun())
             {
+                CacheValidator.EnsureInitialized();
+
                 var documentTypes = (from type in TypeFinder.FindClassesOfType<DocumentTypeBase>()
                                     let attr = type.GetCustomAttribute<DocumentTypeAttribute>(true)
                                     let name = string.IsNullOrEmpty(attr.Name) ? type.Name : attr.Name
