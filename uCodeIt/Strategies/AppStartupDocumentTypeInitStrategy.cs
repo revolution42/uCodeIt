@@ -24,20 +24,19 @@ namespace uCodeIt.Strategies
 
         public void Process(IEnumerable<DocumentTypeMetadata> types)
         {
-            var contentTypes = new List<ContentType>();
+            var contentTypes = new List<IContentType>();
 
             foreach (var type in types)
             {
-                var ct = new ContentType(-1)
-                {
-                    Name = type.Name,
-                    Alias = type.Alias,
-                    AllowedAsRoot = type.AllowAsRoot,
-                    Description = type.Description,
-                    Icon = type.Icon,
-                    Thumbnail = type.Thumbnail
-                };
+                var ct = ContentTypeService.GetContentType(type.Alias) ?? new ContentType(-1);
 
+                ct.Name = type.Name;
+                ct.Alias = type.Alias;
+                ct.AllowedAsRoot = type.AllowAsRoot;
+                ct.Description = type.Description;
+                ct.Icon = type.Icon;
+                ct.Thumbnail = type.Thumbnail;
+                
                 contentTypes.Add(ct);
             }
 
