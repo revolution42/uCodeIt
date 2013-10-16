@@ -24,8 +24,9 @@ namespace uCodeIt
             if (strategy.CanRun())
             {
                 CacheValidator.EnsureInitialized();
+                var types = CacheValidator.GetTypesToUpdate();
 
-                var documentTypes = (from type in TypeFinder.FindClassesOfType<DocumentTypeBase>()
+                var documentTypes = (from type in types
                                     let attr = type.GetCustomAttribute<DocumentTypeAttribute>(true)
                                     let name = string.IsNullOrEmpty(attr.Name) ? type.Name : attr.Name
                                     let alias = string.IsNullOrEmpty(attr.Alias) ? type.Name : attr.Alias
@@ -56,7 +57,7 @@ namespace uCodeIt
 
                 strategy.Process(documentTypes);
 
-                CacheValidator.RebuildComplete();
+                CacheValidator.RebuildComplete(types);
             }
         }
 

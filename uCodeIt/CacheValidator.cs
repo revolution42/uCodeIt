@@ -43,7 +43,7 @@ namespace uCodeIt
             return false;
         }
 
-        internal static void RebuildComplete()
+        internal static void RebuildComplete(IEnumerable<Type> types)
         {
             try
             {
@@ -53,6 +53,15 @@ namespace uCodeIt
                 {
                     writer.WriteLine("Build completed");
                 }
+
+                var location = IOHelper.MapPath(TypeCache);
+
+                if (File.Exists(location))
+                {
+                    File.Delete(location);
+                }
+
+                StoreCache(location, cache.Concat(types.ToDictionary(t => t, CreateHash)));
             }
             catch
             {
@@ -73,28 +82,7 @@ namespace uCodeIt
                         {
                             var types = TypeFinder.FindClassesOfType<DocumentTypeBase>();
                             cache = types.ToDictionary(t => t, CreateHash);
-
-                            var xml = cache
-                                .GroupBy(x => x.Key.Module)
-                                .GroupBy(x => x.Key.Assembly)
-                                .Select(x =>
-                                    new XElement("assembly",
-                                        new XAttribute("name", x.Key.FullName),
-                                        x.Select(module =>
-                                            new XElement("module",
-                                                new XAttribute("versionId", module.Key.ModuleVersionId),
-                                                module.Select(type =>
-                                                    new XElement("type",
-                                                        new XElement("name", type.Key.FullName),
-                                                        new XElement("hash", type.Value)
-                                                    )
-                                                )
-                                            )
-                                        )
-                                    )
-                                );
-
-                            new XElement("typeCache", xml).Save(location);
+                            StoreCache(location, cache);
                         }
                         else
                         {
@@ -104,6 +92,31 @@ namespace uCodeIt
                     }
                 }
             }
+        }
+
+        private static void StoreCache(string location, IEnumerable<KeyValuePair<Type, string>> types)
+        {
+            var xml = types
+                .GroupBy(x => x.Key.Module)
+                .GroupBy(x => x.Key.Assembly)
+                .Select(x =>
+                    new XElement("assembly",
+                        new XAttribute("name", x.Key.FullName),
+                        x.Select(module =>
+                            new XElement("module",
+                                new XAttribute("versionId", module.Key.ModuleVersionId),
+                                module.Select(type =>
+                                    new XElement("type",
+                                        new XElement("name", type.Key.FullName),
+                                        new XElement("hash", type.Value)
+                                    )
+                                )
+                            )
+                        )
+                    )
+                );
+
+            new XElement("typeCache", xml).Save(location);
         }
 
         private static Dictionary<Type, string> ReadTypesFromCache(string location)
@@ -145,6 +158,13 @@ namespace uCodeIt
             var hash = hasher.ComputeHash(bytes);
 
             return string.Join(string.Empty, hash.Select(x => x.ToString("X2")));
+        }
+
+        internal static IEnumerable<Type> GetTypesToUpdate()
+        {
+            var allTypes = TypeFinder.FindClassesOfType<DocumentTypeBase>();
+
+            return allTypes.Where(x => !cache.Any(c => c.Key == x));
         }
     }
 }
