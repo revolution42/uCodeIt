@@ -128,10 +128,10 @@ namespace uCodeIt
             foreach (var assembly in assemblies)
             {
                 var asm = Assembly.Load(assembly.Attribute("name").Value);
-                foreach (var module in assembly.Descendants())
+                foreach (var module in assembly.Descendants("module"))
                 {
                     var moduleVersionId = new Guid(module.Attribute("versionId").Value);
-                    foreach (var type in module.Descendants())
+                    foreach (var type in module.Descendants("type"))
                     {
                         var typeName = type.Descendants("name").First().Value;
                         var typeHash = type.Descendants("hash").First().Value;
