@@ -81,8 +81,8 @@ namespace uCodeIt
                         if (!File.Exists(location))
                         {
                             var types = TypeFinder.FindClassesOfType<DocumentTypeBase>();
-                            cache = types.ToDictionary(t => t, CreateHash);
-                            StoreCache(location, cache);
+                            cache = new Dictionary<Type, string>();
+                            StoreCache(location, types.ToDictionary(t => t, CreateHash));
                         }
                         else
                         {
