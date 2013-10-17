@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using uCodeIt.DocumentTypes;
 using uCodeIt.Metadata;
 using Umbraco.Core;
@@ -11,20 +12,23 @@ namespace uCodeIt.Strategies
     public class AppStartupDocumentTypeInitStrategy : IDocumentTypeInitStrategy
     {
         protected internal AppStartupDocumentTypeInitStrategy()
-            : this(ApplicationContext.Current.Services.ContentTypeService)
+            : this(ApplicationContext.Current.Services.ContentTypeService, ApplicationContext.Current.Services.DataTypeService)
         {
         }
 
-        protected AppStartupDocumentTypeInitStrategy(IContentTypeService contentTypeService)
+        protected AppStartupDocumentTypeInitStrategy(IContentTypeService contentTypeService, IDataTypeService dataTypeService)
         {
             ContentTypeService = contentTypeService;
+            DataTypeService = dataTypeService;
         }
 
         public IContentTypeService ContentTypeService { get; private set; }
+        public IDataTypeService DataTypeService { get; private set; }
 
         public void Process(IEnumerable<DocumentTypeMetadata> types)
         {
             var contentTypes = new List<IContentType>();
+            var dataTypeDefinitions = DataTypeService.GetAllDataTypeDefinitions().ToArray();
 
             foreach (var type in types)
             {
@@ -36,7 +40,21 @@ namespace uCodeIt.Strategies
                 ct.Description = type.Description;
                 ct.Icon = type.Icon;
                 ct.Thumbnail = type.Thumbnail;
-                
+
+                var properties = ct.PropertyTypes.ToArray();
+
+                var newProperties = type.Properties.Where(p => !properties.Any(x => x.Alias == p.Alias));
+
+                foreach (var property in newProperties)
+                {
+                    ct.AddPropertyType(new PropertyType(dataTypeDefinitions.First(dtd => dtd.Name == property.DataType))
+                    {
+                        Name = property.Name,
+                        Alias = property.Alias,
+                        Description = property.Description
+                    });
+                }
+
                 contentTypes.Add(ct);
             }
 
