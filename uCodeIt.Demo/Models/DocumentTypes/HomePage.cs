@@ -2,13 +2,13 @@
 
 namespace uCodeIt.Demo.Models.DocumentTypes
 {
-    [DocumentType]
+    [DocumentType(Alias = "Home")]
     public class HomePage : DocumentTypeBase
     {
-        [Property]
+        [Property(DataType = "Textstring")]
         public string Title { get; set; }
 
-        [Property]
+        [Property(DataType = "Textstring")]
         public string BodyContent { get; set; }
     }
 }
