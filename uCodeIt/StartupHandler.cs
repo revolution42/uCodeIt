@@ -39,8 +39,8 @@ namespace uCodeIt
                                         Name = name,
                                         Alias = alias,
                                         Description = attr.Description,
-                                        Icon = attr.Icon,
-                                        Thumbnail = attr.Thumbnail,
+                                        Icon = attr.Icon ?? DocumentTypeAttribute.DefaultIcon,
+                                        Thumbnail = attr.Thumbnail ?? DocumentTypeAttribute.DefaultThumbnail,
                                         AllowAsRoot = attr.AllowAsRoot,
                                         Properties = properties.Select(p => new PropertyMetadata {
                                             Name = string.IsNullOrEmpty(p.Attribute.Name) ? p.Property.Name : p.Attribute.Name,
