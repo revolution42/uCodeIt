@@ -33,14 +33,14 @@ namespace uCodeIt
 
                     //todo - properly validate the contents
                     if (!string.IsNullOrEmpty(contents))
-                        return true;
+                        return false;
                 }
             }
             catch
             {
             }
 
-            return false;
+            return true;
         }
 
         internal static void RebuildComplete(IEnumerable<Type> types)
