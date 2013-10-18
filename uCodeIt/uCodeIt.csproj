@@ -156,6 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CacheValidator.cs" />
+    <Compile Include="DocumentTypes\DataType.cs" />
     <Compile Include="DocumentTypes\DocumentTypeAttribute.cs" />
     <Compile Include="DocumentTypes\DocumentTypeBase.cs" />
     <Compile Include="DocumentTypes\PropertyAttribute.cs" />
