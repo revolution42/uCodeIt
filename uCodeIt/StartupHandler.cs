@@ -45,7 +45,8 @@ namespace uCodeIt
                                             Name = string.IsNullOrEmpty(p.Attribute.Name) ? p.Property.Name : p.Attribute.Name,
                                             Alias = string.IsNullOrEmpty(p.Attribute.Alias) ? p.Property.Name : p.Attribute.Alias,
                                             Description = p.Attribute.Description,
-                                            DataType = p.Attribute.DataType
+                                            DataType = p.Attribute.DataType,
+                                            Tab = p.Attribute.Tab
                                         }),
                                         Type = type,
                                         Attribute = attr

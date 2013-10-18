@@ -9,5 +9,6 @@ namespace uCodeIt.DocumentTypes
         public string Alias { get; set; }
         public string Description { get; set; }
         public string DataType { get; set; }
+        public object Tab { get; set; }
     }
 }

@@ -45,12 +45,51 @@ namespace uCodeIt.Importer
 
                 foreach (var property in newProperties)
                 {
-                    ct.AddPropertyType(new PropertyType(dataTypeDefinitions.First(dtd => dtd.Name == property.DataType))
+                    var p = new PropertyType(dataTypeDefinitions.First(dtd => dtd.Name == property.DataType))
                     {
                         Name = property.Name,
                         Alias = property.Alias,
                         Description = property.Description
-                    });
+                    };
+
+                    if (property.Tab == null)
+                        ct.AddPropertyType(p);
+                    else
+                        ct.AddPropertyType(p, property.Tab.ToString());
+                }
+
+                var modifiedProperties = type.Properties.Join(properties, p => p.Alias, p => p.Alias, (meta, p) => new
+                {
+                    Metadata = meta,
+                    PropertyType = p
+                });
+
+                foreach (var property in modifiedProperties)
+                {
+                    var p = property.PropertyType;
+                    var meta = property.Metadata;
+
+                    p.Name = meta.Name;
+                    p.DataTypeDefinitionId = dataTypeDefinitions.First(dtd => dtd.Name == meta.DataType).Id;
+                    p.Description = meta.Description;
+
+                    //the following hack is brought to you be the letter F
+                    var fn = p.GetType().GetProperty("PropertyGroupId", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(p) as System.Lazy<int>;
+                    if (fn != null)
+                    {
+                        var tabId = fn.Value;
+                        var tab = ct.PropertyGroups.FirstOrDefault(t => t.Id == tabId);
+                        var newTabName = meta.Tab.ToString();
+                        var newTab = ct.PropertyGroups.FirstOrDefault(t => t.Name == newTabName);
+
+                        if (tab != null && tab.Name != newTabName)
+                        {
+                            if (newTab == null)
+                                ct.AddPropertyGroup(newTabName);
+
+                            ct.MovePropertyType(p.Alias, newTabName);
+                        }
+                    }
                 }
 
                 contentTypes.Add(ct);
