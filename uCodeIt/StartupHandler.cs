@@ -15,7 +15,7 @@ namespace uCodeIt
 
         public void OnApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            if (!CacheValidator.RebuildRequired())
+            if (!applicationContext.IsConfigured || !CacheValidator.RebuildRequired())
                 //The cache already exists and by extension has been run
                 return;
 
