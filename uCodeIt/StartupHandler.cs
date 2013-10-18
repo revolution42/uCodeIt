@@ -4,6 +4,7 @@ using Umbraco.Core;
 using System.Linq;
 using uCodeIt.Metadata;
 using System.Reflection;
+using uCodeIt.Importer;
 
 namespace uCodeIt
 {
@@ -19,9 +20,7 @@ namespace uCodeIt
                 //The cache already exists and by extension has been run
                 return;
 
-            var strategy = DocumentTypeStrategyFactory.Current;
-
-            if (strategy.CanRun())
+            if (ExecutionStrategyFactory.Current.CanRun())
             {
                 CacheValidator.EnsureInitialized();
                 var types = CacheValidator.GetTypesToUpdate();
@@ -55,7 +54,7 @@ namespace uCodeIt
                 foreach (var documentType in documentTypes)
                     documentType.AllowedChildren = documentTypes.Where(t => documentType.Attribute.AllowedChildren.Any(x => x == t.Type));
 
-                strategy.Process(documentTypes);
+                ImporterFactory.Instance.Process(documentTypes);
 
                 CacheValidator.RebuildComplete(types);
             }
