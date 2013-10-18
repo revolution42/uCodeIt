@@ -1,6 +1,6 @@
 ﻿namespace uCodeIt.Strategies
 {
-    public class AppStartupDocumentTypeInitStrategy : IExecutionStrategy
+    public class AppStartupExecutionStrategy : IExecutionStrategy
     {
         public bool CanRun()
         {

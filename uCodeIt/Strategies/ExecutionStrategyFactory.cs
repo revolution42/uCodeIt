@@ -9,7 +9,7 @@ namespace uCodeIt.Strategies
         {
             get
             {
-                return _strategy == null ? _strategy = new AppStartupDocumentTypeInitStrategy() : _strategy;
+                return _strategy == null ? _strategy = new AppStartupExecutionStrategy() : _strategy;
             }
             set
             {
