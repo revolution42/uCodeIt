@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>uCodeIt</id>
+        <version>0.0.0</version>
+        <title>uCodeIt</title>
+        <authors>The authors</authors>
+        <owners></owners>
+        <projectUrl>https://github.com/codegecko/uCodeIt/</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <summary></summary>
+        <description>Code first for umbraco.</description>
+        <copyright></copyright>
+        <tags></tags>
+        <dependencies></dependencies>
+    </metadata>
+    <files />
+</package>

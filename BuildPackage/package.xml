@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<umbPackage>
+	<files />
+	<info>
+		<package>
+			<name>uCodeIt</name>
+			<version>0.0.0</version>
+			<license></license>
+			<url></url>
+			<requirements>
+				<major>6</major>
+				<minor>0</minor>
+				<patch>0</patch>
+			</requirements>
+		</package>
+		<author>
+			<name>a</name>
+			<website></website>
+		</author>
+		<readme><![CDATA[]]></readme>
+	</info>
+	<DocumentTypes />
+	<Templates />
+	<Stylesheets />
+	<Macros />
+	<DictionaryItems />
+	<Languages />
+	<DataTypes />
+	<Actions>
+		<Action runat="install" undo="true" alias="uComponents_Uninstaller" />
+	</Actions>
+</umbPackage>
